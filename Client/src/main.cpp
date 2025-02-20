@@ -1,17 +1,24 @@
 #include <iostream>
-#include "network.h"
+#include "Network.h"
+
+using namespace networking;
 
 int main(int argc, char** argv)
 {
-	if (networking::Network::initialize())
+	if (Network::initialize())
 	{
 		std::cout << "Winsock api successfully initialized." << std::endl;
+		Socket socket;
+		if (socket.create() == EResult::Success)
+		{
+			std::cout << "Socket created successfuly" << std::endl;
+		}
+		else
+		{
+			std::cerr << "Couldn't create socket." << std::endl;
+		}
 	}
-	else
-	{
-		std::cerr << "Socket failed to create." << std::endl;
-	}
-	networking::Network::shutdown();
+	Network::shutdown();
 	system("pause");
 	return 0;
 }
