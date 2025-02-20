@@ -22,6 +22,10 @@ namespace networking {
 			int error = WSAGetLastError();
 			return EResult::NotYetImplemented;
 		}
+		if (setSocketOption(TCP_NoDelay, TRUE) != EResult::Success)
+		{
+			return EResult::NotYetImplemented;
+		}
 		return EResult::Success;
 	}
 
@@ -49,6 +53,25 @@ namespace networking {
 	SocketHandle Socket::getSocketHandle()
 	{
 		return m_socketHandle;
+	}
+
+	EResult Socket::setSocketOption(ESocketOption socketOption, BOOL value)
+	{
+		int result = 0;
+		switch (socketOption)
+		{
+		case ESocketOption::TCP_NoDelay:
+			result = setsockopt(m_socketHandle, IPPROTO_TCP, TCP_NODELAY, (const char*)&value, sizeof(value));
+			break;
+		default:
+			return EResult::NotYetImplemented;
+		}
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
 	}
 
 }

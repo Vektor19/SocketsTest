@@ -3,7 +3,9 @@
 #include <WinSock2.h>
 #include "SocketHandle.h"
 #include "EIpVersion.h"
+#include "ESocketOption.h"
 #include "EResult.h"
+#include "IpEndpoint.h"
 namespace networking {
 	class Socket
 	{
@@ -14,6 +16,7 @@ namespace networking {
 		EIpVersion getIpVersion();
 		SocketHandle getSocketHandle();
 	private:
+		EResult setSocketOption(ESocketOption socketOption, BOOL value);
 		EIpVersion m_ipVersion = EIpVersion::IPv4;
 		SocketHandle m_socketHandle = INVALID_SOCKET;
 	};

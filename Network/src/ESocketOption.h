@@ -1,10 +1,8 @@
 #pragma once
 namespace networking {
-	enum EIpVersion
+	enum ESocketOption
 	{
-		Unknown,
-		IPv4,
-		IPv6
+		TCP_NoDelay
 	};
 
 }
