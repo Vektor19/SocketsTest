@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 {
 	if (Network::initialize())
 	{
-		IpEndpoint endpoint("www.google.com", 5555);
+		IpEndpoint endpoint("google.com", 5555);
 		if (endpoint.getIpVersion() == EIpVersion::IPv4)
 		{
 			std::cout << "Hostname: " << endpoint .getHostname() << std::endl;
