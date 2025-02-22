@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 		}
 		else
 		{
-			std::cout << "Not ipv4" << std::endl;
+			std::cout << "Not IPv4" << std::endl;
 		}
 		std::cout << "Winsock api successfully initialized." << std::endl;
 		Socket socket;
