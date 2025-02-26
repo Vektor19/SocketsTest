@@ -21,6 +21,22 @@ int main(int argc, char** argv)
 				{
 					std::cout << "Accepted new conneciton." << std::endl;
 					newConnectionEndpoint.print();
+
+					char buffer[1024];
+					int bytesReceived = 0;
+					while (true)
+					{
+						EResult result = connectionSocket.recv(buffer, 1024, bytesReceived);
+						if (result != EResult::Success)
+							break;
+						std::cout << buffer << std::endl;
+
+						std::cin.getline(buffer, 1024);
+						int bytesSent = 0;
+						if (connectionSocket.send(buffer, 1024, bytesSent) != EResult::Success)
+							break;
+						Sleep(500);
+					}
 					connectionSocket.close();
 				}
 				else

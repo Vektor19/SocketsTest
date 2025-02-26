@@ -70,6 +70,32 @@ namespace networking {
 		return EResult::Success;
 	}
 
+	EResult TcpSocket::send(const void* data, int numberOfBytes, int& bytesSent)
+	{
+		bytesSent = ::send(m_socketHandle, (const char*)data, numberOfBytes, NULL);
+		if (bytesSent == SOCKET_ERROR)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
+	}
+
+	EResult TcpSocket::recv(void* destination, int numberOfBytes, int& bytesRecieved)
+	{
+		bytesRecieved = ::recv(m_socketHandle, (char*)destination, numberOfBytes, NULL);
+		if (bytesRecieved == 0)
+		{
+			return EResult::NotYetImplemented;
+		}
+		if (bytesRecieved == SOCKET_ERROR)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
+	}
+
 	EResult TcpSocket::setSocketOption(ESocketOption socketOption, BOOL value)
 	{
 		int result = 0;

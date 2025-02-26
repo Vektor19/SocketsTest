@@ -15,6 +15,20 @@ int main(int argc, char** argv)
 			if (tcpSocket.connect(IpEndpoint("127.0.0.1", 5555)) == EResult::Success)
 			{
 				std::cout << "Connected to the server." << std::endl;
+				char buffer[1024];
+				int bytesSent = 0;
+				EResult result = EResult::Success;
+				while (result == EResult::Success)
+				{
+					std::cin.getline(buffer, 1024);
+					result = tcpSocket.send(buffer, 1024, bytesSent);
+					Sleep(500);
+					int bytesReceived = 0;
+					result = tcpSocket.recv(buffer, 1024, bytesReceived);
+					if (result != EResult::Success)
+						break;
+					std::cout << buffer << std::endl;
+				}
 			}
 			else
 			{
