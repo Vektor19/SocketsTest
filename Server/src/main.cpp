@@ -16,9 +16,11 @@ int main(int argc, char** argv)
 			{
 				std::cout << "Socket successfuly listening on port 5555" << std::endl;
 				TcpSocket connectionSocket;
-				if (tcpSocket.accept(connectionSocket) == EResult::Success)
+				IpEndpoint newConnectionEndpoint;
+				if (tcpSocket.accept(connectionSocket, newConnectionEndpoint) == EResult::Success)
 				{
 					std::cout << "Accepted new conneciton." << std::endl;
+					newConnectionEndpoint.print();
 					connectionSocket.close();
 				}
 				else

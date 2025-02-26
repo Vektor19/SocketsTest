@@ -1,5 +1,6 @@
 #include "TcpSocket.h"
 #include <assert.h>
+#include <iostream>
 namespace networking {
 
 	TcpSocket::TcpSocket(EIpVersion ipVersion, SocketHandle socketHandle)
@@ -42,14 +43,17 @@ namespace networking {
 		return EResult::Success;
 	}
 
-	EResult TcpSocket::accept(Socket& outSocket)
+	EResult TcpSocket::accept(Socket& outSocket, IpEndpoint& outEndpoint)
 	{
-		SocketHandle acceptedSock = ::accept(m_socketHandle, nullptr, nullptr);
+		sockaddr_in addr = {};
+		int len = sizeof(sockaddr_in);
+		SocketHandle acceptedSock = ::accept(m_socketHandle, (sockaddr*)(&addr), &len);
 		if (acceptedSock == INVALID_SOCKET)
 		{
 			int error = WSAGetLastError();
 			return EResult::NotYetImplemented;
 		}
+		outEndpoint = IpEndpoint((sockaddr*)&addr);
 		outSocket = TcpSocket(IPv4, acceptedSock);
 		return EResult::Success;
 	}

@@ -12,8 +12,8 @@ namespace networking {
 	class IpEndpoint
 	{
 	public:
-		IpEndpoint(const char * ip, uint16_t port);
-
+		IpEndpoint(const char* ip = "0.0.0.0", uint16_t port = 0);
+		IpEndpoint(sockaddr* addr);
 		EIpVersion getIpVersion();
 		std::string getHostname();
 		std::string getIpStr();
