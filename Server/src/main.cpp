@@ -3,59 +3,111 @@
 
 using namespace networking;
 
+void runWithUdp();
+void runWithTcp();
+
 int main(int argc, char** argv)
 {
 	if (Network::initialize())
 	{
 		std::cout << "Winsock api successfully initialized." << std::endl;
-		TcpSocket tcpSocket;
-		if (tcpSocket.create() == EResult::Success)
-		{
-			std::cout << "Socket created successfuly" << std::endl;
-			if (tcpSocket.listen(IpEndpoint("0.0.0.0", 5555), 5) == EResult::Success)
-			{
-				std::cout << "Socket successfuly listening on port 5555" << std::endl;
-				TcpSocket connectionSocket;
-				IpEndpoint newConnectionEndpoint;
-				if (tcpSocket.accept(connectionSocket, newConnectionEndpoint) == EResult::Success)
-				{
-					std::cout << "Accepted new conneciton." << std::endl;
-					newConnectionEndpoint.print();
-
-					char buffer[1024];
-					int bytesReceived = 0;
-					while (true)
-					{
-						EResult result = connectionSocket.recv(buffer, 1024, bytesReceived);
-						if (result != EResult::Success)
-							break;
-						std::cout << buffer << std::endl;
-
-						std::cin.getline(buffer, 1024);
-						int bytesSent = 0;
-						if (connectionSocket.send(buffer, 1024, bytesSent) != EResult::Success)
-							break;
-						Sleep(500);
-					}
-					connectionSocket.close();
-				}
-				else
-				{
-					std::cerr << "Failed to accept connection." << std::endl;
-				}
-			}
-			else
-			{
-				std::cerr << "Failed to listen on 5555 port." << std::endl;
-			}
-			tcpSocket.close();
-		}
-		else
-		{
-			std::cerr << "Couldn't create socket." << std::endl;
-		}
+		runWithUdp();
+		//runWithTcp();
 	}
 	Network::shutdown();
 	system("pause");
     return 0;
+}
+
+void runWithUdp()
+{
+	UdpSocket udpSocket;
+	if (udpSocket.create() == EResult::Success)
+	{
+		std::cout << "Socket created successfuly" << std::endl;
+		if (udpSocket.bind(IpEndpoint("0.0.0.0", 6666)) == EResult::Success)
+		{
+			std::cout << "Socket successfuly bound to port 6666" << std::endl;
+
+			IpEndpoint senderEndpoint;
+			char buffer[1024];
+			int bytesReceived = 0;
+			while (true)
+			{
+				EResult result = udpSocket.recvFrom(senderEndpoint,buffer, 1024, bytesReceived);
+				if (result != EResult::Success)
+					break;
+
+				/*std::cout << "Sender Endpoint: " << std::endl;
+				senderEndpoint.print();*/
+				std::cout << buffer << std::endl;
+
+				std::cin.getline(buffer, 1024);
+				int bytesSent = 0;
+				if (udpSocket.sendTo(senderEndpoint, buffer, 1024, bytesSent) != EResult::Success)
+					break;
+				Sleep(500);
+			}
+
+		}
+		else
+		{
+			std::cerr << "Failed to listen on 5555 port." << std::endl;
+		}
+		udpSocket.close();
+	}
+	else
+	{
+		std::cerr << "Couldn't create socket." << std::endl;
+	}
+}
+
+void runWithTcp()
+{
+	TcpSocket tcpSocket;
+	if (tcpSocket.create() == EResult::Success)
+	{
+		std::cout << "Socket created successfuly" << std::endl;
+		if (tcpSocket.listen(IpEndpoint("0.0.0.0", 5555), 5) == EResult::Success)
+		{
+			std::cout << "Socket successfuly listening on port 5555" << std::endl;
+			TcpSocket connectionSocket;
+			IpEndpoint newConnectionEndpoint;
+			if (tcpSocket.accept(connectionSocket, newConnectionEndpoint) == EResult::Success)
+			{
+				std::cout << "Accepted new conneciton." << std::endl;
+				newConnectionEndpoint.print();
+
+				char buffer[1024];
+				int bytesReceived = 0;
+				while (true)
+				{
+					EResult result = connectionSocket.recv(buffer, 1024, bytesReceived);
+					if (result != EResult::Success)
+						break;
+					std::cout << buffer << std::endl;
+
+					std::cin.getline(buffer, 1024);
+					int bytesSent = 0;
+					if (connectionSocket.send(buffer, 1024, bytesSent) != EResult::Success)
+						break;
+					Sleep(500);
+				}
+				connectionSocket.close();
+			}
+			else
+			{
+				std::cerr << "Failed to accept connection." << std::endl;
+			}
+		}
+		else
+		{
+			std::cerr << "Failed to listen on 5555 port." << std::endl;
+		}
+		tcpSocket.close();
+	}
+	else
+	{
+		std::cerr << "Couldn't create socket." << std::endl;
+	}
 }
