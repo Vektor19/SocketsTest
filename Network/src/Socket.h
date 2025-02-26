@@ -13,6 +13,7 @@ namespace networking {
 		Socket(EIpVersion ipVersion = EIpVersion::IPv4, SocketHandle socketHandle = INVALID_SOCKET);
 		EResult create();
 		EResult close();
+		EResult bind(IpEndpoint endPoint);
 		EIpVersion getIpVersion();
 		SocketHandle getSocketHandle();
 	private:

@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
+#include <WS2tcpip.h>
 namespace networking {
 	class IpEndpoint
 	{
@@ -18,6 +19,8 @@ namespace networking {
 		std::string getIpStr();
 		std::vector<uint8_t> getIpBytes();
 		uint16_t getPort();
+		sockaddr_in getSockaddrIPv4();
+		void print();
 	private:
 		EIpVersion m_ipVersion = EIpVersion::Unknown;
 		std::string m_hostname;

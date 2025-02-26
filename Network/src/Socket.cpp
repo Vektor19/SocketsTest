@@ -45,6 +45,18 @@ namespace networking {
 		return EResult::Success;
 	}
 
+	EResult Socket::bind(IpEndpoint endPoint)
+	{
+		sockaddr_in addr = endPoint.getSockaddrIPv4();
+		int result = ::bind(m_socketHandle, (sockaddr*)(& addr), sizeof(sockaddr_in));
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
+	}
+
 	EIpVersion networking::Socket::getIpVersion()
 	{
 		return m_ipVersion;
