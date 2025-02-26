@@ -10,6 +10,10 @@ add_library(Network STATIC
 	src/ESocketOption.h
 	src/Socket.h
 	src/Socket.cpp
+	src/TcpSocket.h
+	src/TcpSocket.cpp
+	src/UdpSocket.h
+	src/UdpSocket.cpp
 	src/IpEndpoint.h
 	src/IpEndpoint.cpp
 )

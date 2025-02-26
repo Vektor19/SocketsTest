@@ -11,13 +11,13 @@ namespace networking {
 	{
 	public:
 		Socket(EIpVersion ipVersion = EIpVersion::IPv4, SocketHandle socketHandle = INVALID_SOCKET);
-		EResult create();
-		EResult close();
-		EResult bind(IpEndpoint endPoint);
-		EIpVersion getIpVersion();
-		SocketHandle getSocketHandle();
-	private:
-		EResult setSocketOption(ESocketOption socketOption, BOOL value);
+		virtual EResult create() = 0;
+		virtual EResult close();
+		virtual EResult bind(IpEndpoint endPoint);
+		virtual EIpVersion getIpVersion();
+		virtual SocketHandle getSocketHandle();
+	protected:
+		virtual EResult setSocketOption(ESocketOption socketOption, BOOL value) = 0;
 		EIpVersion m_ipVersion = EIpVersion::IPv4;
 		SocketHandle m_socketHandle = INVALID_SOCKET;
 	};
