@@ -12,13 +12,23 @@ int main(int argc, char** argv)
 		if (tcpSocket.create() == EResult::Success)
 		{
 			std::cout << "Socket created successfuly" << std::endl;
-			if (tcpSocket.bind(IpEndpoint("0.0.0.0", 5555)) == EResult::Success)
+			if (tcpSocket.listen(IpEndpoint("0.0.0.0", 5555), 5) == EResult::Success)
 			{
-				std::cout << "Socket bound successfuly" << std::endl;
+				std::cout << "Socket successfuly listening on port 5555" << std::endl;
+				TcpSocket connectionSocket;
+				if (tcpSocket.accept(connectionSocket) == EResult::Success)
+				{
+					std::cout << "Accepted new conneciton." << std::endl;
+					connectionSocket.close();
+				}
+				else
+				{
+					std::cerr << "Failed to accept connection." << std::endl;
+				}
 			}
 			else
 			{
-				std::cerr << "Failed to bind socket on 5555 port." << std::endl;
+				std::cerr << "Failed to listen on 5555 port." << std::endl;
 			}
 			tcpSocket.close();
 		}

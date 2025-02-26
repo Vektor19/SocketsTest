@@ -27,6 +27,45 @@ namespace networking {
 		return EResult::Success;
 	}
 
+	EResult TcpSocket::listen(IpEndpoint endpoint, int backlog)
+	{
+		if (this->bind(endpoint) != EResult::Success)
+		{
+			return EResult::NotYetImplemented;
+		}
+		int result = ::listen(m_socketHandle, backlog);
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
+	}
+
+	EResult TcpSocket::accept(Socket& outSocket)
+	{
+		SocketHandle acceptedSock = ::accept(m_socketHandle, nullptr, nullptr);
+		if (acceptedSock == INVALID_SOCKET)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		outSocket = TcpSocket(IPv4, acceptedSock);
+		return EResult::Success;
+	}
+
+	EResult TcpSocket::connect(IpEndpoint endpoint)
+	{
+		sockaddr_in addr = endpoint.getSockaddrIPv4();
+		int result = ::connect(m_socketHandle, (sockaddr*)(&addr), sizeof(sockaddr_in));
+		if (result!=0)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
+	}
+
 	EResult TcpSocket::setSocketOption(ESocketOption socketOption, BOOL value)
 	{
 		int result = 0;
