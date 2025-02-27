@@ -29,7 +29,7 @@ void runWithUdp()
 		{
 			std::cout << "Socket successfuly bound to port 7777" << std::endl;
 
-			IpEndpoint serverEndpoint("127.0.0.1", 6666);
+			IpEndpoint serverEndpoint("192.168.5.102", 6666);
 			char buffer[1024];
 			int bytesSent = 0;
 			while (true)
