@@ -15,7 +15,7 @@ namespace networking
 
 		if (LOBYTE(wsadata.wVersion) != 2 || HIBYTE(wsadata.wVersion) != 2) 
 		{
-			std::cerr << "Could not find a usable version of the winsock api dll." << std::endl;
+			std::cerr << "Couldn't find a usable version of the winsock api dll." << std::endl;
 			return false;
 		}
 
