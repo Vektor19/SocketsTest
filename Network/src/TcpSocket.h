@@ -10,6 +10,7 @@ namespace networking {
 		EResult accept(Socket& outSocket, IpEndpoint& outEndpoint);
 		EResult connect(IpEndpoint endpoint);
 		EResult send(const void* data, int numberOfBytes, int& bytesSent);
+		EResult sendAll(const void* data, int numberOfBytes);
 		EResult recv(void* destination, int numberOfBytes, int& bytesRecieved);
 	private:
 		EResult setSocketOption(ESocketOption socketOption, BOOL value) override;
