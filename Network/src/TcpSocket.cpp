@@ -114,6 +114,24 @@ namespace networking {
 		return EResult::Success;
 	}
 
+	EResult TcpSocket::recvAll(const void* destination, int numberOfBytes)
+	{
+		int totalBytesReceived = 0;
+		while (totalBytesReceived < numberOfBytes)
+		{
+			int bytesRemaining = numberOfBytes - totalBytesReceived;
+			int bytesReceived = 0;
+			char* bufferOffset = (char*)destination + totalBytesReceived;
+			EResult result = recv(bufferOffset, bytesRemaining, bytesReceived);
+			if (result != EResult::Success)
+			{
+				return EResult::NotYetImplemented;
+			}
+			totalBytesReceived += bytesReceived;
+		}
+		return EResult::Success;
+	}
+
 	EResult TcpSocket::setSocketOption(ESocketOption socketOption, BOOL value)
 	{
 		int result = 0;

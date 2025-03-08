@@ -12,6 +12,7 @@ namespace networking {
 		EResult send(const void* data, int numberOfBytes, int& bytesSent);
 		EResult sendAll(const void* data, int numberOfBytes);
 		EResult recv(void* destination, int numberOfBytes, int& bytesRecieved);
+		EResult recvAll(const void* destination, int numberOfBytes);
 	private:
 		EResult setSocketOption(ESocketOption socketOption, BOOL value) override;
 	};
