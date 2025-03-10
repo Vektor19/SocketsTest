@@ -73,18 +73,15 @@ void runWithTcp()
 		if (tcpSocket.connect(IpEndpoint("127.0.0.1", 5555)) == EResult::Success)
 		{
 			std::cout << "Connected to the server." << std::endl;
-			char buffer[200000];
-			int bytesSent = 0;
-			memset(buffer, 'a', 199999);
-			buffer[199999] = '\0';
+			char buffer[1024];
 			EResult result = EResult::Success;
 			while (result == EResult::Success)
 			{
-				std::cin;
-				result = tcpSocket.send(buffer, 200000, bytesSent);
+				std::cin.getline(buffer, 1024);
+				result = tcpSocket.sendAll(buffer, 1024);
 				Sleep(500);
 				int bytesReceived = 0;
-				result = tcpSocket.recv(buffer, 200000, bytesReceived);
+				result = tcpSocket.recvAll(buffer, 1024);
 				if (result != EResult::Success)
 					break;
 				std::cout << buffer << std::endl;
