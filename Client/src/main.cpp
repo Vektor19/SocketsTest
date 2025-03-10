@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 	if (Network::initialize())
 	{
 		std::cout << "Winsock api successfully initialized." << std::endl;
-		runWithUdp();
-		//runWithTcp();
+		//runWithUdp();
+		runWithTcp();
 	}
 	Network::shutdown();
 	system("pause");
@@ -73,16 +73,18 @@ void runWithTcp()
 		if (tcpSocket.connect(IpEndpoint("127.0.0.1", 5555)) == EResult::Success)
 		{
 			std::cout << "Connected to the server." << std::endl;
-			char buffer[1024];
+			char buffer[200000];
 			int bytesSent = 0;
+			memset(buffer, 'a', 199999);
+			buffer[199999] = '\0';
 			EResult result = EResult::Success;
 			while (result == EResult::Success)
 			{
-				std::cin.getline(buffer, 1024);
-				result = tcpSocket.send(buffer, 1024, bytesSent);
+				std::cin;
+				result = tcpSocket.send(buffer, 200000, bytesSent);
 				Sleep(500);
 				int bytesReceived = 0;
-				result = tcpSocket.recv(buffer, 1024, bytesReceived);
+				result = tcpSocket.recv(buffer, 200000, bytesReceived);
 				if (result != EResult::Success)
 					break;
 				std::cout << buffer << std::endl;
