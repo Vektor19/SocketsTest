@@ -86,11 +86,16 @@ void runWithTcp()
 						break;
 					std::cout << buffer << std::endl;
 					std::cin.getline(buffer, 1024);
+					if (strcmp(buffer, "exit") == 0)
+					{
+						break;
+					}
 					int bytesSent = 0;
 					if (connectionSocket.sendAll(buffer, 1024) != EResult::Success)
 						break;
 					Sleep(500);
 				}
+				connectionSocket.shutdown(EShutdownType::Both);
 				connectionSocket.close();
 			}
 			else
