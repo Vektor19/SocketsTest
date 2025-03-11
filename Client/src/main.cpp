@@ -78,6 +78,10 @@ void runWithTcp()
 			while (result == EResult::Success)
 			{
 				std::cin.getline(buffer, 1024);
+				if (strcmp(buffer, "exit") == 0)
+				{
+					break;
+				}
 				result = tcpSocket.sendAll(buffer, 1024);
 				Sleep(500);
 				int bytesReceived = 0;
@@ -91,6 +95,7 @@ void runWithTcp()
 		{
 			std::cerr << "Failed to connect to the server." << std::endl;
 		}
+		tcpSocket.shutdown(EShutdownType::Both);
 		tcpSocket.close();
 	}
 	else
