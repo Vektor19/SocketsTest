@@ -132,6 +132,17 @@ namespace networking {
 		return EResult::Success;
 	}
 
+	EResult TcpSocket::shutdown(EShutdownType eShutdownType)
+	{
+		int result = ::shutdown(m_socketHandle, (int)eShutdownType);
+		if (result != 0)
+		{
+			int error = WSAGetLastError();
+			return EResult::NotYetImplemented;
+		}
+		return EResult::Success;
+	}
+
 	EResult TcpSocket::setSocketOption(ESocketOption socketOption, BOOL value)
 	{
 		int result = 0;
