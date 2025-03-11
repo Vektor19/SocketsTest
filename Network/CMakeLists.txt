@@ -16,5 +16,6 @@ add_library(Network STATIC
 	src/UdpSocket.cpp
 	src/IpEndpoint.h
 	src/IpEndpoint.cpp
+	src/EShutdownType.h
 )
 target_include_directories(Network PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
