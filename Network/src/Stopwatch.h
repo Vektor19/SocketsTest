@@ -7,7 +7,6 @@ public:
 	void stop();
 	double getDurationInMS();
 private:
-	std::chrono::nanoseconds m_timeStarted;
-	std::chrono::nanoseconds m_timeStopped;
-	std::chrono::nanoseconds m_duration;
+	std::chrono::time_point<std::chrono::steady_clock> m_timeStarted;
+	std::chrono::time_point<std::chrono::steady_clock> m_timeStopped;
 };
