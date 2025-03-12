@@ -1,10 +1,12 @@
 #include <iostream>
 #include "Network.h"
+#include "Utils.h"
 
 using namespace networking;
 
 void runWithUdp();
 void runWithTcp();
+void benchmark();
 
 int main(int argc, char** argv)
 {
@@ -12,7 +14,8 @@ int main(int argc, char** argv)
 	{
 		std::cout << "Winsock api successfully initialized." << std::endl;
 		//runWithUdp();
-		runWithTcp();
+		//runWithTcp();
+		benchmark();
 	}
 	Network::shutdown();
 	system("pause");
@@ -95,6 +98,66 @@ void runWithTcp()
 						break;
 					Sleep(500);
 				}
+				connectionSocket.shutdown(EShutdownType::Both);
+				connectionSocket.close();
+			}
+			else
+			{
+				std::cerr << "Failed to accept connection." << std::endl;
+			}
+		}
+		else
+		{
+			std::cerr << "Failed to listen on 5555 port." << std::endl;
+		}
+		tcpSocket.close();
+	}
+	else
+	{
+		std::cerr << "Couldn't create socket." << std::endl;
+	}
+}
+
+void benchmark()
+{
+	TcpSocket tcpSocket;
+	if (tcpSocket.create() == EResult::Success)
+	{
+		std::cout << "Socket created successfuly" << std::endl;
+		if (tcpSocket.listen(IpEndpoint("0.0.0.0", 5555), 5) == EResult::Success)
+		{
+			std::cout << "Socket successfuly listening on port 5555" << std::endl;
+			TcpSocket connectionSocket;
+			IpEndpoint newConnectionEndpoint;
+			if (tcpSocket.accept(connectionSocket, newConnectionEndpoint) == EResult::Success)
+			{
+				std::cout << "Accepted new conneciton." << std::endl;
+				newConnectionEndpoint.print();
+				const int bufferSize = 8192;
+				const int iterations = 1000000;
+				char buffer[bufferSize];
+				EResult result = EResult::Success;
+				Stopwatch stopwatch;
+				stopwatch.start();
+				for (size_t i = 0; i < iterations; i++)
+				{
+					result = connectionSocket.recvAll(buffer, bufferSize);
+				}
+				stopwatch.stop();
+				if (result == EResult::Success)
+				{
+					std::cout << "Data received!" << std::endl;
+					double duration = stopwatch.getDurationInSeconds();
+					double totalBytes = static_cast<double>(iterations) * bufferSize;
+					double speed = static_cast<double>(totalBytes) / duration;
+					std::cout << "Speed MB/s: " << (speed / 1024.0) / 1024.0 << std::endl;
+
+				}
+				else
+				{
+					std::cerr << "Error occured while receiving!" << std::endl;
+				}
+
 				connectionSocket.shutdown(EShutdownType::Both);
 				connectionSocket.close();
 			}
