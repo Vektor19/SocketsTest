@@ -9,3 +9,8 @@ void Stopwatch::stop()
 {
 	m_timeStopped = std::chrono::high_resolution_clock::now();
 }
+
+double Stopwatch::getDurationInMS()
+{
+	return std::chrono::duration<double, std::milli>(m_timeStopped - m_timeStarted).count();
+}
