@@ -1,10 +1,12 @@
 #include <iostream>
 #include "Network.h"
+#include "Utils.h"
 
 using namespace networking;
 
 void runWithUdp();
 void runWithTcp();
+void benchmark();
 
 int main(int argc, char** argv)
 {
@@ -12,7 +14,8 @@ int main(int argc, char** argv)
 	{
 		std::cout << "Winsock api successfully initialized." << std::endl;
 		//runWithUdp();
-		runWithTcp();
+		//runWithTcp();
+		benchmark();
 	}
 	Network::shutdown();
 	system("pause");
@@ -90,6 +93,56 @@ void runWithTcp()
 					break;
 				std::cout << buffer << std::endl;
 			}
+		}
+		else
+		{
+			std::cerr << "Failed to connect to the server." << std::endl;
+		}
+		tcpSocket.shutdown(EShutdownType::Both);
+		tcpSocket.close();
+	}
+	else
+	{
+		std::cerr << "Couldn't create socket." << std::endl;
+	}
+}
+
+
+void benchmark()
+{
+	TcpSocket tcpSocket;
+	if (tcpSocket.create() == EResult::Success)
+	{
+		std::cout << "Socket created successfuly" << std::endl;
+		if (tcpSocket.connect(IpEndpoint("192.168.0.108", 5555)) == EResult::Success)
+		{
+			std::cout << "Connected to the server." << std::endl;
+			const int bufferSize = 8192;
+			const int iterations = 1000000;
+			char buffer[bufferSize];
+			memset(buffer, 'a', 8192);
+			EResult result = EResult::Success;
+			Stopwatch stopwatch;
+			stopwatch.start();
+			for (size_t i = 0; i < iterations; i++)
+			{
+				result = tcpSocket.sendAll(buffer, bufferSize);
+			}
+			stopwatch.stop();
+			if (result == EResult::Success)
+			{
+				std::cout << "Data sent!" << std::endl;
+				double duration = stopwatch.getDurationInSeconds();
+				double totalBytes = static_cast<double>(iterations) * bufferSize;
+				double speed = static_cast<double>(totalBytes) / duration;
+				std::cout << "Speed MB/s: " << (speed / 1024.0) / 1024.0 << std::endl;
+				
+			}
+			else
+			{
+				std::cerr << "Error occured while sending!" << std::endl;
+			}
+			
 		}
 		else
 		{
