@@ -133,7 +133,7 @@ void benchmark()
 			{
 				std::cout << "Accepted new conneciton." << std::endl;
 				newConnectionEndpoint.print();
-				const int bufferSize = 40960;
+				const int bufferSize = 409600;
 				const int iterations = 100000;
 				char* buffer = new char[bufferSize];
 				EResult result = EResult::Success;

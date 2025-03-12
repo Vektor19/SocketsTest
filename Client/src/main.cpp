@@ -114,13 +114,13 @@ void benchmark()
 	if (tcpSocket.create() == EResult::Success)
 	{
 		std::cout << "Socket created successfuly" << std::endl;
-		if (tcpSocket.connect(IpEndpoint("192.168.0.108", 5555)) == EResult::Success)
+		if (tcpSocket.connect(IpEndpoint("192.168.0.100", 5555)) == EResult::Success)
 		{
 			std::cout << "Connected to the server." << std::endl;
-			const int bufferSize = 40960;
+			const int bufferSize = 409600;
 			const int iterations = 100000;
 			char* buffer = new char[bufferSize];
-			memset(buffer, 'a', 40960);
+			memset(buffer, 'a', 409600);
 			EResult result = EResult::Success;
 			Stopwatch stopwatch;
 			stopwatch.start();
