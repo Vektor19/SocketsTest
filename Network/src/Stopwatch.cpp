@@ -2,4 +2,5 @@
 
 void Stopwatch::start()
 {
+	m_timeStarted = std::chrono::high_resolution_clock::now();
 }
