@@ -119,7 +119,7 @@ void benchmark()
 			std::cout << "Connected to the server." << std::endl;
 			const int bufferSize = 40960;
 			const int iterations = 100000;
-			char buffer[bufferSize];
+			char* buffer = new char[bufferSize];
 			memset(buffer, 'a', 40960);
 			EResult result = EResult::Success;
 			Stopwatch stopwatch;
@@ -142,6 +142,7 @@ void benchmark()
 			{
 				std::cerr << "Error occured while sending!" << std::endl;
 			}
+			delete[] buffer;
 			
 		}
 		else

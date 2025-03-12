@@ -135,7 +135,7 @@ void benchmark()
 				newConnectionEndpoint.print();
 				const int bufferSize = 40960;
 				const int iterations = 100000;
-				char buffer[bufferSize];
+				char* buffer = new char[bufferSize];
 				EResult result = EResult::Success;
 				Stopwatch stopwatch;
 				stopwatch.start();
@@ -157,7 +157,7 @@ void benchmark()
 				{
 					std::cerr << "Error occured while receiving!" << std::endl;
 				}
-
+				delete[] buffer;
 				connectionSocket.shutdown(EShutdownType::Both);
 				connectionSocket.close();
 			}
