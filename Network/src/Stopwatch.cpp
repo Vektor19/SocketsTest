@@ -14,3 +14,8 @@ double Stopwatch::getDurationInMS()
 {
 	return std::chrono::duration<double, std::milli>(m_timeStopped - m_timeStarted).count();
 }
+
+double Stopwatch::getDurationInSeconds()
+{
+	return std::chrono::duration<double>(m_timeStopped - m_timeStarted).count();
+}
