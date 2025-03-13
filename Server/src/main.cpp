@@ -120,6 +120,9 @@ void runWithTcp()
 
 void benchmark()
 {
+	int bufferSize = 10000;
+	std::cout << "Enter buffer size: ";
+	std::cin >> bufferSize;
 	TcpSocket tcpSocket;
 	if (tcpSocket.create() == EResult::Success)
 	{
@@ -133,7 +136,6 @@ void benchmark()
 			{
 				std::cout << "Accepted new conneciton." << std::endl;
 				newConnectionEndpoint.print();
-				const int bufferSize = 409600;
 				const int iterations = 100000;
 				char* buffer = new char[bufferSize];
 				EResult result = EResult::Success;
