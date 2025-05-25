@@ -13,23 +13,23 @@ namespace networking
 		std::string status;
 		switch (m_status)
 		{
-		case OK:
-			status = OK + " OK";
+		case ResponseStatus::OK:
+			status = ResponseStatus::OK + " OK";
 			break;
-		case NotFound:
-			status = NotFound + " Not Found";
+		case ResponseStatus::NotFound:
+			status = ResponseStatus::NotFound + " Not Found";
 			break;
-		case MethodNotAllowed:
-			status = MethodNotAllowed + " Method Not Allowed";
+		case ResponseStatus::MethodNotAllowed:
+			status = ResponseStatus::MethodNotAllowed + " Method Not Allowed";
 			break;
-		case BadRequest:
-			status = BadRequest + " Bad Request";
+		case ResponseStatus::BadRequest:
+			status = ResponseStatus::BadRequest + " Bad Request";
 			break;
-		case Created:
-			status = Created + " Created";
+		case ResponseStatus::Created:
+			status = ResponseStatus::Created + " Created";
 			break;
 		default:
-			status = BadRequest + " Bad Request";
+			status = ResponseStatus::BadRequest + " Bad Request";
 			break;
 		}
 		responseString.append("\r\n");
@@ -39,12 +39,13 @@ namespace networking
 		}
 		responseString.append("\r\n");
 		responseString.append(m_body);
+		return responseString;
 	}
 	void Response::setStatus(ResponseStatus status)
 	{
 		this->m_status = status;
 	}
-	void Response::addHeader(std::string& key, std::string& value)
+	void Response::addHeader(const std::string& key, const std::string& value)
 	{
 		m_headers.emplace(key, value);
 	}

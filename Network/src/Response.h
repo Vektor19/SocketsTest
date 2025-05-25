@@ -9,7 +9,7 @@ namespace networking {
 		Response();
 		std::string toString();
 		void setStatus(ResponseStatus status);
-		void addHeader(std::string& key, std::string& value);
+		void addHeader(const std::string& key, const std::string& value);
 		void setBody(std::string& body);
 	private:
 		ResponseStatus m_status;
