@@ -14,13 +14,22 @@ namespace networking
 
 		m_body = requestStr.substr(dividerIndex + 4);
 		std::cout << "BODY: \n" << m_body;
-		auto afterMethodIndex = headingContent.find(' ');
-		m_method = headingContent.substr(0, afterMethodIndex);
+		auto methodEndIndex = headingContent.find(' ');
+		m_method = headingContent.substr(0, methodEndIndex);
 		
 		if (m_method != "GET" && m_method != "POST") return ParseResult::BadMethod;
-		
-		std::string headersString = headingContent.substr(afterMethodIndex + 1);
+		auto uriEndIndex = headingContent.substr(methodEndIndex + 1).find(' ');
+		std::string m_uri = headingContent.substr(methodEndIndex + 1, uriEndIndex);
+		std::string m_httpVersion = headingContent.substr(uriEndIndex + 1, headingContent.find('\r'));
+		std::string headersString = headingContent.substr(headingContent.find('\n') + 1);
 
+		std::vector<std::string> headers = StringUtils::split(headersString, "\r\n");
+		for (std::string& headerRow: headers)
+		{
+			auto keyEndIndex = headerRow.find(' ');
+			m_headers.emplace(std::move(headerRow.substr(0, keyEndIndex)), std::move(headerRow.substr(keyEndIndex + 1)));
+		}
 
+		return ParseResult::OK;
 	}
 }
