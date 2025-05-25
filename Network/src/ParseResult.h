@@ -1,6 +1,6 @@
 #pragma once
 namespace networking {
-	enum ParseResult
+	enum class ParseResult
 	{
 		OK,
 		BadMethod,
