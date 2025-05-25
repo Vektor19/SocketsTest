@@ -19,6 +19,8 @@ namespace networking {
 		TcpSocket m_tcpSocket;
 		std::string m_rootPath;
 		EResult handleClient(TcpSocket acceptSocket);
+		std::string getContentType(const std::string& path);
+
 	};
 
 }

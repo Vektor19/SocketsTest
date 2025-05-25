@@ -114,7 +114,7 @@ namespace networking {
 					else
 					{
 						response.setBody(body);
-						response.addHeader("Content-Type", "*/*");
+						response.addHeader("Content-Type", getContentType(request.getUriPath()));
 						response.setStatus(ResponseStatus::OK);
 					}
 				}
@@ -136,5 +136,26 @@ namespace networking {
 
 		return EResult::Success;
 	}
+
+	std::string HttpServer::getContentType(const std::string& path)
+	{
+		auto endsWith = [](const std::string& str, const std::string& suffix) {
+			if (str.length() < suffix.length()) return false;
+			return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+			};
+
+		if (endsWith(path, ".html")) return "text/html";
+		if (endsWith(path, ".css"))  return "text/css";
+		if (endsWith(path, ".js"))   return "application/javascript";
+		if (endsWith(path, ".json")) return "application/json";
+		if (endsWith(path, ".png"))  return "image/png";
+		if (endsWith(path, ".jpg") || endsWith(path, ".jpeg")) return "image/jpeg";
+		if (endsWith(path, ".gif"))  return "image/gif";
+		if (endsWith(path, ".svg"))  return "image/svg+xml";
+		if (endsWith(path, ".ico"))  return "image/x-icon";
+
+		return "*/*";
+	}
+
 
 }
