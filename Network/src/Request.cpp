@@ -18,16 +18,21 @@ namespace networking
 		m_method = headingContent.substr(0, methodEndIndex);
 		
 		if (m_method != "GET" && m_method != "POST") return ParseResult::BadMethod;
-		auto uriEndIndex = headingContent.substr(methodEndIndex + 1).find(' ');
-		std::string m_uri = headingContent.substr(methodEndIndex + 1, uriEndIndex);
-		std::string m_httpVersion = headingContent.substr(uriEndIndex + 1, headingContent.find('\r'));
+		auto uriStartIndex = methodEndIndex + 1;
+		auto uriEndIndex = headingContent.find(' ', uriStartIndex);
+		std::string m_uri = headingContent.substr(uriStartIndex, uriEndIndex - uriStartIndex);
+		
+		auto httpVersionStartIndex = uriEndIndex + 1;
+		auto httpVersionEndIndex = headingContent.find('\r', httpVersionStartIndex);
+		std::string m_httpVersion = headingContent.substr(httpVersionStartIndex, httpVersionEndIndex - httpVersionStartIndex);
+
 		std::string headersString = headingContent.substr(headingContent.find('\n') + 1);
 
 		std::vector<std::string> headers = StringUtils::split(headersString, "\r\n");
 		for (std::string& headerRow: headers)
 		{
 			auto keyEndIndex = headerRow.find(' ');
-			m_headers.emplace(std::move(headerRow.substr(0, keyEndIndex)), std::move(headerRow.substr(keyEndIndex + 1)));
+			m_headers.emplace(std::move(headerRow.substr(0, keyEndIndex-1)), std::move(headerRow.substr(keyEndIndex + 1)));
 		}
 
 		return ParseResult::OK;
