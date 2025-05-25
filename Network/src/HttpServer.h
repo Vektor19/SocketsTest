@@ -6,17 +6,18 @@
 #include "ESocketOption.h"
 #include "EResult.h"
 #include "IpEndpoint.h"
+#include <string>
 namespace networking {
 	class TcpSocket;
 	class HttpServer
 	{
 	public:
-		HttpServer();
+		HttpServer(std::string& executablePath);
 		~HttpServer();
 		EResult start(int port);
 	private:
 		TcpSocket m_tcpSocket;
-		
+		std::string m_rootPath;
 		EResult handleClient(TcpSocket acceptSocket);
 	};
 

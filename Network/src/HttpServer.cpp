@@ -4,10 +4,12 @@
 #include <thread>
 #include <mutex>
 #include <iostream>
+#include "Request.h"
+#include "Response.h"
 
 namespace networking {
 	std::mutex mtx;
-	HttpServer::HttpServer()
+	HttpServer::HttpServer(std::string& executablePath)
 	{
 		if (m_tcpSocket.create() == EResult::Success)
 		{
@@ -17,6 +19,9 @@ namespace networking {
 		{
 			std::cerr << "Couldn't create socket." << std::endl;
 		}
+
+		size_t found = executablePath.find_last_of("/\\");
+		m_rootPath = executablePath.substr(0, found + 1);
 	}
 	HttpServer::~HttpServer()
 	{
@@ -73,12 +78,24 @@ namespace networking {
 			}
 			requestStr.append(buffer, byteReceived);
 		} while (byteReceived == bufferSize);
-
 		{
 			std::lock_guard<std::mutex> guard(mtx);
 			std::cout << requestStr << std::endl;
 		}
-
+		Request request;
+		Response response;
+		switch (request.parseFromString(requestStr))
+		{
+		case ParseResult::BadMethod:
+			break;
+		case ParseResult::BadRequest:
+			break;
+		case ParseResult::OK:
+			break;
+		default:
+			break;
+		}
+		
 
 
 		acceptSocket.shutdown(EShutdownType::Both);

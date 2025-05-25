@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 		//runWithUdp();
 		//runWithTcp();
 		//benchmark();
-		runHttpServer();
+		runHttpServer(argv[0]);
 	}
 	Network::shutdown();
 	system("pause");
@@ -182,8 +182,8 @@ void benchmark()
 	}
 }
 
-void runHttpServer() 
+void runHttpServer(std::string& executablePath) 
 {
-	HttpServer server;
+	HttpServer server(executablePath);
 	server.start(80);
 }
