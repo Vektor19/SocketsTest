@@ -7,6 +7,7 @@ using namespace networking;
 void runWithUdp();
 void runWithTcp();
 void benchmark();
+void runHttpServer();
 
 int main(int argc, char** argv)
 {
@@ -15,7 +16,8 @@ int main(int argc, char** argv)
 		std::cout << "Winsock api successfully initialized." << std::endl;
 		//runWithUdp();
 		//runWithTcp();
-		benchmark();
+		//benchmark();
+		runHttpServer();
 	}
 	Network::shutdown();
 	system("pause");
@@ -136,7 +138,7 @@ void benchmark()
 			{
 				std::cout << "Accepted new conneciton." << std::endl;
 				newConnectionEndpoint.print();
-				const int iterations = 100000;
+				const int iterations = 1000;
 				char* buffer = new char[bufferSize];
 				EResult result = EResult::Success;
 				Stopwatch stopwatch;
@@ -178,4 +180,9 @@ void benchmark()
 	{
 		std::cerr << "Couldn't create socket." << std::endl;
 	}
+}
+
+void runHttpServer() 
+{
+
 }
