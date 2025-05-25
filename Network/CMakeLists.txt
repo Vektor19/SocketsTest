@@ -22,5 +22,12 @@ add_library(Network STATIC
 	src/Stopwatch.h
 	src/HttpServer.cpp
 	src/HttpServer.h
+	src/Request.cpp
+	src/Request.h
+	src/Response.cpp
+	src/Response.h
+	src/ParseResult.h
+	src/StringUtils.cpp
+	src/StringUtils.h
 )
 target_include_directories(Network PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
