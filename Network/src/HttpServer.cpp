@@ -6,6 +6,7 @@
 #include <iostream>
 #include "Request.h"
 #include "Response.h"
+#include <IOUtils.h>
 
 namespace networking {
 	std::mutex mtx;
@@ -21,7 +22,7 @@ namespace networking {
 		}
 
 		size_t found = executablePath.find_last_of("/\\");
-		m_rootPath = executablePath.substr(0, found + 1)+"res\\";
+		m_rootPath = executablePath.substr(0, found + 1) + "res\\";
 	}
 	HttpServer::~HttpServer()
 	{
@@ -87,17 +88,48 @@ namespace networking {
 		switch (request.parseFromString(requestStr))
 		{
 		case ParseResult::BadMethod:
-			
+			response.setStatus(ResponseStatus::MethodNotAllowed);
 			break;
 		case ParseResult::BadRequest:
+			response.setStatus(ResponseStatus::BadRequest);
 			break;
-		case ParseResult::OK:
+		case ParseResult::OK: {
+			const std::string& method = request.getMethod();
+			if (method == "GET")
+			{
+				if (request.getUriPath() == "/")
+				{
+					response.setBody(IOUtils::getFileString(m_rootPath + "index.html"));
+					response.addHeader("Content-Type", "text/html");
+				}
+				else
+				{
+					std::string body = IOUtils::getFileString(m_rootPath + request.getUriPath().substr(1));
+					if (body == "")
+					{
+						response.setBody(IOUtils::getFileString(m_rootPath + "404.html"));
+						response.addHeader("Content-Type", "text/html");
+						response.setStatus(ResponseStatus::NotFound);
+					}
+					else
+					{
+						response.setBody(body);
+						response.addHeader("Content-Type", "*/*");
+						response.setStatus(ResponseStatus::OK);
+					}
+				}
+			}
 			break;
+		}
 		default:
 			break;
 		}
-		
-
+		std::string responseStr = response.toString();
+		if (acceptSocket.sendAll(&responseStr[0], responseStr.size()) != EResult::Success)
+		{
+			std::cerr << "Failed to send response" << std::endl;
+			return EResult::NotYetImplemented;
+		}
 
 		acceptSocket.shutdown(EShutdownType::Both);
 		acceptSocket.close();
