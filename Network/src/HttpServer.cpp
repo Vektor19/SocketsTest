@@ -21,7 +21,7 @@ namespace networking {
 		}
 
 		size_t found = executablePath.find_last_of("/\\");
-		m_rootPath = executablePath.substr(0, found + 1);
+		m_rootPath = executablePath.substr(0, found + 1)+"res\\";
 	}
 	HttpServer::~HttpServer()
 	{
@@ -87,6 +87,7 @@ namespace networking {
 		switch (request.parseFromString(requestStr))
 		{
 		case ParseResult::BadMethod:
+			
 			break;
 		case ParseResult::BadRequest:
 			break;
