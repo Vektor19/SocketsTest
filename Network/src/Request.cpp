@@ -20,11 +20,11 @@ namespace networking
 		if (m_method != "GET" && m_method != "POST") return ParseResult::BadMethod;
 		auto uriStartIndex = methodEndIndex + 1;
 		auto uriEndIndex = headingContent.find(' ', uriStartIndex);
-		std::string m_uri = headingContent.substr(uriStartIndex, uriEndIndex - uriStartIndex);
+		m_uriPath = headingContent.substr(uriStartIndex, uriEndIndex - uriStartIndex);
 		
 		auto httpVersionStartIndex = uriEndIndex + 1;
 		auto httpVersionEndIndex = headingContent.find('\r', httpVersionStartIndex);
-		std::string m_httpVersion = headingContent.substr(httpVersionStartIndex, httpVersionEndIndex - httpVersionStartIndex);
+		m_httpVersion = headingContent.substr(httpVersionStartIndex, httpVersionEndIndex - httpVersionStartIndex);
 
 		std::string headersString = headingContent.substr(headingContent.find('\n') + 1);
 
