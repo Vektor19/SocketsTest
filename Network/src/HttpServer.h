@@ -14,9 +14,10 @@ namespace networking {
 		HttpServer();
 		~HttpServer();
 		EResult start(int port);
-		EResult handleClient(const TcpSocket& acceptSocket);
 	private:
 		TcpSocket m_tcpSocket;
+		
+		EResult handleClient(TcpSocket acceptSocket);
 	};
 
 }

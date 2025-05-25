@@ -184,5 +184,6 @@ void benchmark()
 
 void runHttpServer() 
 {
-
+	HttpServer server;
+	server.start(80);
 }

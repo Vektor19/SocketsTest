@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 #include "TcpSocket.h"
 #include "UdpSocket.h"
+#include "HttpServer.h"
 namespace networking {
 	class Network
 	{
