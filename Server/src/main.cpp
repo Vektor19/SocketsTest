@@ -7,7 +7,7 @@ using namespace networking;
 void runWithUdp();
 void runWithTcp();
 void benchmark();
-void runHttpServer();
+void runHttpServer(std::string);
 
 int main(int argc, char** argv)
 {
@@ -182,7 +182,7 @@ void benchmark()
 	}
 }
 
-void runHttpServer(std::string& executablePath) 
+void runHttpServer(std::string executablePath) 
 {
 	HttpServer server(executablePath);
 	server.start(80);
