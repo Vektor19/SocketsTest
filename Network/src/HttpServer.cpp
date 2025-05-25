@@ -1,50 +1,32 @@
-#include "Socket.h"
+#include "TcpSocket.h"
 #include <assert.h>
+#include "HttpServer.h"
+#include <iostream>
 namespace networking {
-
-	Socket::Socket(EIpVersion ipVersion, SocketHandle socketHandle)
-		: m_ipVersion(ipVersion)
-		, m_socketHandle(socketHandle)
+	HttpServer::HttpServer()
 	{
-		assert(m_ipVersion == EIpVersion::IPv4);
-	}
-
-	EResult Socket::close()
-	{
-		if (m_socketHandle == INVALID_SOCKET)
+		if (m_tcpSocket.create() == EResult::Success)
 		{
-			return EResult::NotYetImplemented;
+			std::cout << "Socket created successfuly" << std::endl;
 		}
-		int result = closesocket(m_socketHandle);
-		if (result != 0)
+		else
 		{
-			int error = WSAGetLastError();
-			return EResult::NotYetImplemented;
+			std::cerr << "Couldn't create socket." << std::endl;
 		}
-		m_socketHandle = INVALID_SOCKET;
-		return EResult::Success;
+	}
+	HttpServer::~HttpServer()
+	{
 	}
 
-	EResult Socket::bind(IpEndpoint endPoint)
+	EResult HttpServer::start(int port)
 	{
-		sockaddr_in addr = endPoint.getSockaddrIPv4();
-		int result = ::bind(m_socketHandle, (sockaddr*)(& addr), sizeof(sockaddr_in));
-		if (result != 0)
-		{
-			int error = WSAGetLastError();
-			return EResult::NotYetImplemented;
-		}
-		return EResult::Success;
+
+		return EResult();
 	}
 
-	EIpVersion networking::Socket::getIpVersion()
+	EResult HttpServer::handleClient(const TcpSocket& acceptSocket)
 	{
-		return m_ipVersion;
-	}
-
-	SocketHandle Socket::getSocketHandle()
-	{
-		return m_socketHandle;
+		return EResult();
 	}
 
 }
