@@ -29,5 +29,7 @@ add_library(Network STATIC
 	src/ParseResult.h
 	src/StringUtils.cpp
 	src/StringUtils.h
+	src/IOUtils.cpp
+	src/IOUtils.h
 )
 target_include_directories(Network PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
