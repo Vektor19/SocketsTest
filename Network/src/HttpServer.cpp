@@ -2,8 +2,11 @@
 #include <assert.h>
 #include "HttpServer.h"
 #include <thread>
+#include <mutex>
 #include <iostream>
+
 namespace networking {
+	std::mutex mtx;
 	HttpServer::HttpServer()
 	{
 		if (m_tcpSocket.create() == EResult::Success)
@@ -31,9 +34,11 @@ namespace networking {
 				IpEndpoint newConnectionEndpoint;
 				if (m_tcpSocket.accept(connectionSocket, newConnectionEndpoint) == EResult::Success)
 				{
-					std::cout << "Accepted new conneciton from: " << std::endl;
-					newConnectionEndpoint.print();
-
+					{
+						std::lock_guard<std::mutex> guard(mtx);
+						std::cout << "Accepted new conneciton from: " << std::endl;
+						newConnectionEndpoint.print();
+					}
 					std::thread handlingThread(&HttpServer::handleClient, this, std::move(connectionSocket));
 
 					handlingThread.detach();
@@ -69,8 +74,10 @@ namespace networking {
 			requestStr.append(buffer, byteReceived);
 		} while (byteReceived == bufferSize);
 
-		std::cout << requestStr << std::endl;
-
+		{
+			std::lock_guard<std::mutex> guard(mtx);
+			std::cout << requestStr << std::endl;
+		}
 
 
 
