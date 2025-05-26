@@ -2,7 +2,8 @@
 namespace networking {
 	enum ESocketOption
 	{
-		TCP_NoDelay
+		TCP_NoDelay,
+		Ipv6_Only
 	};
 
 }

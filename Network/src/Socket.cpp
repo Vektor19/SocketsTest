@@ -6,7 +6,7 @@ namespace networking {
 		: m_ipVersion(ipVersion)
 		, m_socketHandle(socketHandle)
 	{
-		assert(m_ipVersion == EIpVersion::IPv4);
+		assert(m_ipVersion == EIpVersion::IPv4 || m_ipVersion == EIpVersion::IPv6);
 	}
 
 	EResult Socket::close()
@@ -27,13 +27,27 @@ namespace networking {
 
 	EResult Socket::bind(IpEndpoint endPoint)
 	{
-		sockaddr_in addr = endPoint.getSockaddrIPv4();
-		int result = ::bind(m_socketHandle, (sockaddr*)(& addr), sizeof(sockaddr_in));
-		if (result != 0)
+		if (m_ipVersion == EIpVersion::IPv4)
 		{
-			int error = WSAGetLastError();
-			return EResult::NotYetImplemented;
+			sockaddr_in addr = endPoint.getSockaddrIPv4();
+			int result = ::bind(m_socketHandle, (sockaddr*)(&addr), sizeof(sockaddr_in));
+			if (result != 0)
+			{
+				int error = WSAGetLastError();
+				return EResult::NotYetImplemented;
+			}
 		}
+		else
+		{
+			sockaddr_in6 addr = endPoint.getSockaddrIPv6();
+			int result = ::bind(m_socketHandle, (sockaddr*)(&addr), sizeof(sockaddr_in6));
+			if (result != 0)
+			{
+				int error = WSAGetLastError();
+				return EResult::NotYetImplemented;
+			}
+		}
+		
 		return EResult::Success;
 	}
 

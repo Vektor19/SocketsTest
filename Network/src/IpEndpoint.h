@@ -20,6 +20,7 @@ namespace networking {
 		std::vector<uint8_t> getIpBytes();
 		uint16_t getPort();
 		sockaddr_in getSockaddrIPv4();
+		sockaddr_in6 getSockaddrIPv6();
 		void print();
 	private:
 		EIpVersion m_ipVersion = EIpVersion::Unknown;
