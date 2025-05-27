@@ -41,7 +41,7 @@ namespace networking {
 
 		//ipv6
 		in6_addr addr6;
-		int result = inet_pton(AF_INET6, ip, &addr6);
+		result = inet_pton(AF_INET6, ip, &addr6);
 		if (result == 1)
 		{
 			m_hostname = ip;
