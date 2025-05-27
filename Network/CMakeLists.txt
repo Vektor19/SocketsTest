@@ -37,4 +37,8 @@ add_library(Network STATIC
 	src/IOUtils.h
 	src/ResponseStatus.h
 )
+
+find_package(OpenSSL REQUIRED)
+target_link_libraries(Network PRIVATE OpenSSL::SSL)
+target_link_libraries(Network PRIVATE OpenSSL::Crypto)
 target_include_directories(Network PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

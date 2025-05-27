@@ -1,17 +1,17 @@
 #include "TcpSocket.h"
 #include <assert.h>
 #include "HttpsServer.h"
+#include "Server.h"
 #include <thread>
-#include <mutex>
 #include <iostream>
 #include "Request.h"
 #include "Response.h"
 #include <IOUtils.h>
 
 namespace networking {
-	std::mutex mtx;
 	HttpsServer::HttpsServer(std::string& executablePath): Server(executablePath)
 	{
+		std::string certsPath = m_rootPath + "\\certs\\";
 	}
 	HttpsServer::~HttpsServer()
 	{
@@ -19,7 +19,7 @@ namespace networking {
 
 	EResult HttpsServer::start(int port)
 	{
-		if (m_tcpSocket.listen(IpEndpoint("192.168.5.102", port), 5) == EResult::Success)
+		if (m_tcpSocket.listen(IpEndpoint("192.168.0.108", port), 5) == EResult::Success)
 		{
 			std::cout << "Socket successfuly listening on port " << port << std::endl;
 			while (true)
@@ -68,7 +68,7 @@ namespace networking {
 			requestStr.append(buffer, byteReceived);
 		} while (byteReceived == bufferSize);
 		{
-			std::lock_guard<std::mutex> guard(mtx);
+			std::lock_guard<std::mutex> guard();
 			std::cout << requestStr << std::endl;
 		}
 		Request request;

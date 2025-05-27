@@ -8,7 +8,8 @@
 #include <IOUtils.h>
 
 namespace networking {
-	std::mutex mtx;
+
+	std::mutex Server::mtx;
 	Server::Server(std::string& executablePath)
 	{
 		m_tcpSocket = TcpSocket(EIpVersion::IPv4);

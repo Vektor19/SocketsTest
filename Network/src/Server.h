@@ -8,6 +8,7 @@
 #include "IpEndpoint.h"
 #include "TcpSocket.h"
 #include <string>
+#include <mutex>
 namespace networking {
 	class Server
 	{
@@ -20,7 +21,7 @@ namespace networking {
 		std::string m_rootPath;
 		virtual EResult handleClient(TcpSocket acceptSocket) = 0;
 		std::string getContentType(const std::string& path);
-
+		static std::mutex mtx;
 	};
 
 }

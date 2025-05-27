@@ -2,14 +2,12 @@
 #include <assert.h>
 #include "HttpServer.h"
 #include <thread>
-#include <mutex>
 #include <iostream>
 #include "Request.h"
 #include "Response.h"
 #include <IOUtils.h>
 
 namespace networking {
-	std::mutex mtx;
 	HttpServer::HttpServer(std::string& executablePath): Server(executablePath)
 	{
 	}
@@ -19,7 +17,7 @@ namespace networking {
 
 	EResult HttpServer::start(int port)
 	{
-		if (m_tcpSocket.listen(IpEndpoint("192.168.5.102", port), 5) == EResult::Success)
+		if (m_tcpSocket.listen(IpEndpoint("192.168.0.108", port), 5) == EResult::Success)
 		{
 			std::cout << "Socket successfuly listening on port " << port << std::endl;
 			while (true)
