@@ -1,6 +1,6 @@
 #include "TcpSocket.h"
 #include <assert.h>
-#include "HttpServer.h"
+#include "HttpsServer.h"
 #include <thread>
 #include <mutex>
 #include <iostream>
@@ -10,14 +10,14 @@
 
 namespace networking {
 	std::mutex mtx;
-	HttpServer::HttpServer(std::string& executablePath): Server(executablePath)
+	HttpsServer::HttpsServer(std::string& executablePath): Server(executablePath)
 	{
 	}
-	HttpServer::~HttpServer()
+	HttpsServer::~HttpsServer()
 	{
 	}
 
-	EResult HttpServer::start(int port)
+	EResult HttpsServer::start(int port)
 	{
 		if (m_tcpSocket.listen(IpEndpoint("192.168.5.102", port), 5) == EResult::Success)
 		{
@@ -33,7 +33,7 @@ namespace networking {
 						std::cout << "Accepted new conneciton from: " << std::endl;
 						newConnectionEndpoint.print();
 					}
-					std::thread handlingThread(&HttpServer::handleClient, this, std::move(connectionSocket));
+					std::thread handlingThread(&HttpsServer::handleClient, this, std::move(connectionSocket));
 
 					handlingThread.detach();
 				}
@@ -52,7 +52,7 @@ namespace networking {
 		return EResult::Success;
 	}
 
-	EResult HttpServer::handleClient(TcpSocket acceptSocket)
+	EResult HttpsServer::handleClient(TcpSocket acceptSocket)
 	{
 		int byteReceived = 0;
 		const int bufferSize = 1024;

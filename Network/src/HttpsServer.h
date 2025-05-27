@@ -1,16 +1,14 @@
 #pragma once
 #include "Server.h"
-
 namespace networking {
 	class TcpSocket;
-	class HttpServer: public Server
+	class HttpsServer : public Server
 	{
 	public:
-		HttpServer(std::string& executablePath);
-		~HttpServer();
+		HttpsServer(std::string& executablePath);
+		~HttpsServer();
 		EResult start(int port) override;
 	private:
 		EResult handleClient(TcpSocket acceptSocket) override;
 	};
-
 }

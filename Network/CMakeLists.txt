@@ -20,8 +20,12 @@ add_library(Network STATIC
 	src/Utils.h
 	src/Stopwatch.cpp
 	src/Stopwatch.h
+	src/Server.cpp
+	src/Server.h
 	src/HttpServer.cpp
 	src/HttpServer.h
+	src/HttpsServer.cpp
+	src/HttpsServer.h
 	src/Request.cpp
 	src/Request.h
 	src/Response.cpp
