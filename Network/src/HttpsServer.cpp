@@ -7,14 +7,37 @@
 #include "Request.h"
 #include "Response.h"
 #include <IOUtils.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
+#include <exception>
 
 namespace networking {
-	HttpsServer::HttpsServer(std::string& executablePath): Server(executablePath)
+	HttpsServer::HttpsServer(std::string& executablePath) : Server(executablePath)
 	{
-		std::string certsPath = m_rootPath + "\\certs\\";
+		std::string certPath = m_rootPath + "\\certs\\cert.pem";
+		std::string keyPath = m_rootPath + "\\certs\\key.pem";
+
+		const SSL_METHOD* method = TLS_server_method();
+		m_pSslCtx = SSL_CTX_new(method);
+		if (!m_pSslCtx) {
+			ERR_print_errors_fp(stderr);
+			throw std::exception("Can't start initialize SSL context");
+		}
+
+		if (SSL_CTX_use_certificate_file(m_pSslCtx, certPath.c_str(), SSL_FILETYPE_PEM) <= 0 ||
+			SSL_CTX_use_PrivateKey_file(m_pSslCtx, keyPath.c_str(), SSL_FILETYPE_PEM) <= 0 ||
+			!SSL_CTX_check_private_key(m_pSslCtx)) {
+			ERR_print_errors_fp(stderr);
+			SSL_CTX_free(m_pSslCtx);
+			throw std::exception("Can't process certificate or private key");
+		}
 	}
 	HttpsServer::~HttpsServer()
 	{
+		if (m_pSslCtx) {
+			SSL_CTX_free(m_pSslCtx);
+			m_pSslCtx = nullptr;
+		}
 	}
 
 	EResult HttpsServer::start(int port)
@@ -45,7 +68,7 @@ namespace networking {
 		}
 		else
 		{
-			std::cerr << "Failed to listen on port "<< port << std::endl;
+			std::cerr << "Failed to listen on port " << port << std::endl;
 			return EResult::NotYetImplemented;
 		}
 
@@ -54,19 +77,26 @@ namespace networking {
 
 	EResult HttpsServer::handleClient(TcpSocket acceptSocket)
 	{
-		int byteReceived = 0;
 		const int bufferSize = 1024;
+
+		SSL* ssl = SSL_new(m_pSslCtx);
+		SSL_set_fd(ssl, acceptSocket.getSocketHandle());
+
+		if (SSL_accept(ssl) <= 0) {
+			ERR_print_errors_fp(stderr);
+			SSL_free(ssl);
+			return EResult::NotYetImplemented;
+		}
+
+		int bytesRead = 0;
 		std::string requestStr = "";
 		do
 		{
 			char buffer[bufferSize];
-			if (acceptSocket.recv(buffer, bufferSize, byteReceived) != EResult::Success)
-			{
-				std::cerr << "Failed to receive data from request." << std::endl;
-				return EResult::NotYetImplemented;
-			}
-			requestStr.append(buffer, byteReceived);
-		} while (byteReceived == bufferSize);
+
+			bytesRead = SSL_read(ssl, buffer, bufferSize);
+			requestStr.append(buffer, bytesRead);
+		} while (bytesRead == bufferSize);
 		{
 			std::lock_guard<std::mutex> guard();
 			std::cout << requestStr << std::endl;
@@ -113,15 +143,13 @@ namespace networking {
 			break;
 		}
 		std::string responseStr = response.toString();
-		if (acceptSocket.sendAll(&responseStr[0], responseStr.size()) != EResult::Success)
-		{
-			std::cerr << "Failed to send response" << std::endl;
-			return EResult::NotYetImplemented;
-		}
+		SSL_write(ssl, responseStr.c_str(), static_cast<int>(responseStr.size()));
+
+		SSL_shutdown(ssl);
+		SSL_free(ssl);
 
 		acceptSocket.shutdown(EShutdownType::Both);
 		acceptSocket.close();
-
 		return EResult::Success;
 	}
 }

@@ -8,6 +8,7 @@ void runWithUdp();
 void runWithTcp();
 void benchmark();
 void runHttpServer(std::string);
+void runHttpsServer(std::string);
 
 int main(int argc, char** argv)
 {
@@ -18,6 +19,7 @@ int main(int argc, char** argv)
 		//runWithTcp();
 		//benchmark();
 		runHttpServer(argv[0]);
+		runHttpsServer(argv[0]);
 	}
 	Network::shutdown();
 	system("pause");
@@ -182,8 +184,14 @@ void benchmark()
 	}
 }
 
-void runHttpServer(std::string executablePath) 
+void runHttpServer(std::string executablePath)
 {
 	HttpServer server(executablePath);
 	server.start(80);
+
+}
+void runHttpsServer(std::string executablePath) 
+{
+	HttpsServer server(executablePath);
+	server.start(443);
 }

@@ -30,6 +30,7 @@ namespace networking
 
 	void Network::shutdown()
 	{
+		EVP_cleanup();
 		WSACleanup();
 	}
 }

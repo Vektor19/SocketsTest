@@ -4,6 +4,7 @@
 #include "TcpSocket.h"
 #include "UdpSocket.h"
 #include "HttpServer.h"
+#include "HttpsServer.h"
 namespace networking {
 	class Network
 	{

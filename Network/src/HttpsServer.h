@@ -9,6 +9,7 @@ namespace networking {
 		~HttpsServer();
 		EResult start(int port) override;
 	private:
+		SSL_CTX* m_pSslCtx = nullptr;
 		EResult handleClient(TcpSocket acceptSocket) override;
 	};
 }
