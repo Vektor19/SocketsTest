@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Network.h"
+#include <thread>
 #include "Utils.h"
 
 using namespace networking;
@@ -18,8 +19,9 @@ int main(int argc, char** argv)
 		//runWithUdp();
 		//runWithTcp();
 		//benchmark();
-		runHttpServer(argv[0]);
+		std::thread httpThread(runHttpServer, argv[0]);
 		runHttpsServer(argv[0]);
+		httpThread.join();
 	}
 	Network::shutdown();
 	system("pause");

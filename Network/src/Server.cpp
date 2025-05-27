@@ -23,7 +23,8 @@ namespace networking {
 		}
 
 		size_t found = executablePath.find_last_of("/\\");
-		m_rootPath = executablePath.substr(0, found + 1) + "res\\";
+		m_rootPath = executablePath.substr(0, found + 1);
+		m_resPath = m_rootPath + "res\\";
 	}
 	Server::~Server()
 	{

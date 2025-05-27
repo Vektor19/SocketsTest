@@ -1,5 +1,7 @@
 #pragma once
 #include "Server.h"
+#include <openssl/ssl.h>
+
 namespace networking {
 	class TcpSocket;
 	class HttpsServer : public Server

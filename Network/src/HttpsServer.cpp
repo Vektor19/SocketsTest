@@ -14,8 +14,8 @@
 namespace networking {
 	HttpsServer::HttpsServer(std::string& executablePath) : Server(executablePath)
 	{
-		std::string certPath = m_rootPath + "\\certs\\cert.pem";
-		std::string keyPath = m_rootPath + "\\certs\\key.pem";
+		std::string certPath = m_rootPath + "certs\\cert.pem";
+		std::string keyPath = m_rootPath + "certs\\key.pem";
 
 		const SSL_METHOD* method = TLS_server_method();
 		m_pSslCtx = SSL_CTX_new(method);
@@ -117,15 +117,15 @@ namespace networking {
 			{
 				if (request.getUriPath() == "/")
 				{
-					response.setBody(IOUtils::getFileString(m_rootPath + "index.html"));
+					response.setBody(IOUtils::getFileString(m_resPath + "index.html"));
 					response.addHeader("Content-Type", "text/html");
 				}
 				else
 				{
-					std::string body = IOUtils::getFileString(m_rootPath + request.getUriPath().substr(1));
+					std::string body = IOUtils::getFileString(m_resPath + request.getUriPath().substr(1));
 					if (body == "")
 					{
-						response.setBody(IOUtils::getFileString(m_rootPath + "404.html"));
+						response.setBody(IOUtils::getFileString(m_resPath + "404.html"));
 						response.addHeader("Content-Type", "text/html");
 						response.setStatus(ResponseStatus::NotFound);
 					}

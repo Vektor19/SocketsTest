@@ -39,6 +39,13 @@ add_library(Network STATIC
 )
 
 find_package(OpenSSL REQUIRED)
-target_link_libraries(Network PRIVATE OpenSSL::SSL)
-target_link_libraries(Network PRIVATE OpenSSL::Crypto)
-target_include_directories(Network PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+target_include_directories(Network
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+    PUBLIC ${OPENSSL_INCLUDE_DIR}
+)
+
+target_link_libraries(Network
+    PUBLIC OpenSSL::SSL OpenSSL::Crypto
+)
+message(STATUS "OpenSSL include dir: ${OPENSSL_INCLUDE_DIR}")

@@ -85,15 +85,15 @@ namespace networking {
 			{
 				if (request.getUriPath() == "/")
 				{
-					response.setBody(IOUtils::getFileString(m_rootPath + "index.html"));
+					response.setBody(IOUtils::getFileString(m_resPath + "index.html"));
 					response.addHeader("Content-Type", "text/html");
 				}
 				else
 				{
-					std::string body = IOUtils::getFileString(m_rootPath + request.getUriPath().substr(1));
+					std::string body = IOUtils::getFileString(m_resPath + request.getUriPath().substr(1));
 					if (body == "")
 					{
-						response.setBody(IOUtils::getFileString(m_rootPath + "404.html"));
+						response.setBody(IOUtils::getFileString(m_resPath + "404.html"));
 						response.addHeader("Content-Type", "text/html");
 						response.setStatus(ResponseStatus::NotFound);
 					}

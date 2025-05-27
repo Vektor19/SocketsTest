@@ -19,6 +19,7 @@ namespace networking {
 	protected:
 		TcpSocket m_tcpSocket;
 		std::string m_rootPath;
+		std::string m_resPath;
 		virtual EResult handleClient(TcpSocket acceptSocket) = 0;
 		std::string getContentType(const std::string& path);
 		static std::mutex mtx;
